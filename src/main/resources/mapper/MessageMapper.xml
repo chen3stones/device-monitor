@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.devicemonitor.dao.MessageMapper">
+    <insert id="insertMessage" parameterType="com.chen.devicemonitor.entity.Message">
+        insert into message(u_id,d_id,m_date,msg)values(#{m.uId},#{m.dId},#{m.date},#{m.msg})
+    </insert>
+
+    <select id="getMessage" resultType="com.chen.devicemonitor.entity.Message">
+        select m_id as mId, u_id as uId, d_id as dId from message
+        where u_id = #{userId} and d_id = #{deviceId} and m_date = #{date};
+    </select>
+</mapper>

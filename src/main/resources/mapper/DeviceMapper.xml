@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chen.devicemonitor.dao.DeviceMapper">
+    <insert id="insertDevice">
+        insert into device (d_name,d_ip,d_port,d_type) values (#{device.dName},#{device.dIP},#{device.dPort},#{device.dType})
+    </insert>
+    <update id="updateDevice">
+        update device set d_name = #{device.dName}, d_ip = #{device.dIP}, d_port = #{device.dPotr}, d_type = #{device.dType}
+        where d_id = #{device.dId}
+    </update>
+    <delete id="deleteDeviceById">
+        delete from device where d_id = #{id}
+    </delete>
+    <select id="getAllDevice" resultType="com.chen.devicemonitor.entity.Device">
+        select d_id as dId, d_name as dName, d_ip as dIP,
+        d_port as dPort, d_type as type from device;
+    </select>
+</mapper>
