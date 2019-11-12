@@ -5,6 +5,11 @@ import com.chen.devicemonitor.dao.UserMapper;
 import com.chen.devicemonitor.entity.Device;
 import com.chen.devicemonitor.entity.Message;
 import com.chen.devicemonitor.entity.User;
+import com.chen.devicemonitor.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,14 +19,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class SendMessageService {
+    Logger logger = LoggerFactory.getLogger(SendMessageService.class);
     @Resource
     ScanService scanService;
     @Resource
     UserMapper userMapper;
     @Resource
     MessageMapper messageMapper;
+
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void sendMessage(){
+        logger.info("{}, check and ready to send message", DateUtil.getNumberTime(System.currentTimeMillis()));
         List<Device> wrongDevices = scanService.getWrongDevice();
         List<User> users = userMapper.getAllUser();
         List<User> adminUsers = users.stream().filter(m->m.getType() == 1).collect(Collectors.toList());

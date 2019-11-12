@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chen.devicemonitor.dao.DeviceMapper">
-    <insert id="insertDevice">
-        insert into device (d_name,d_ip,d_port,d_type) values (#{device.dName},#{device.dIP},#{device.dPort},#{device.dType})
+    <insert id="insertDevice" parameterType="com.chen.devicemonitor.entity.Device">
+        insert into device (d_name,d_ip,d_port,d_type) values (#{device.dName},#{device.dIP},#{device.dPort},#{device.type})
     </insert>
-    <update id="updateDevice">
-        update device set d_name = #{device.dName}, d_ip = #{device.dIP}, d_port = #{device.dPotr}, d_type = #{device.dType}
+    <update id="updateDevice" parameterType="com.chen.devicemonitor.entity.Device">
+        update device set d_name = #{device.dName}, d_ip = #{device.dIP}, d_port = #{device.dPort}, d_type = #{device.type}
         where d_id = #{device.dId}
     </update>
     <delete id="deleteDeviceById">
@@ -14,5 +14,9 @@
     <select id="getAllDevice" resultType="com.chen.devicemonitor.entity.Device">
         select d_id as dId, d_name as dName, d_ip as dIP,
         d_port as dPort, d_type as type from device;
+    </select>
+    <select id="getDeviceById" resultType="com.chen.devicemonitor.entity.Device">
+        select d_id as dId, d_name as dName, d_ip as dIP,
+        d_port as dPort, d_type as type from device where d_id = #{id}
     </select>
 </mapper>

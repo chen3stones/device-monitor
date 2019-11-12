@@ -9,4 +9,8 @@
         select m_id as mId, u_id as uId, d_id as dId from message
         where u_id = #{userId} and d_id = #{deviceId} and m_date = #{date};
     </select>
+    <select id="getAllMessage" resultType="com.chen.devicemonitor.entity.Message">
+        select m_id as mId, u_id as uId, d_id as dId,
+         m_date as date, msg as msg from message
+    </select>
 </mapper>

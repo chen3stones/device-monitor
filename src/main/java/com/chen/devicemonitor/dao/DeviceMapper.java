@@ -9,7 +9,8 @@ import java.util.List;
 @Repository
 public interface DeviceMapper {
     List<Device> getAllDevice();
-    Integer insertDevice(Device device);
-    Integer updateDevice(Device device);
+    Device getDeviceById(Integer id);
+    Integer insertDevice(@Param("device") Device device);
+    Integer updateDevice(@Param("device") Device device);
     Integer deleteDeviceById(Integer id);
 }

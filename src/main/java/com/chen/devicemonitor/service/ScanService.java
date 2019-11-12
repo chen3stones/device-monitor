@@ -32,7 +32,7 @@ public class ScanService {
                     try {
                         String[] ports = device.getDPort().split(",");
                         for(String port : ports) {
-                            System.out.println("test " + device.getDIP() + ":" + device.getDPort());
+                            logger.info("ready to check {}:{}",device.getDIP(),device.getDPort());
                             if(!isOnline(device.getDIP(),Integer.valueOf(port))){
                                 wrongDevices.add(device);
                             }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chen.devicemonitor.dao.UserMapper">
-    <insert id="addUser">
-        insert into user(u_name,u_phone,u_type) values (#{user.uName},#{user.uPhone},#{user.yType})
+    <insert id="addUser" parameterType="com.chen.devicemonitor.entity.User">
+        insert into user(u_name,u_phone,u_type) values (#{user.uName},#{user.phone},#{user.type})
     </insert>
-    <update id="updateUser">
-        update user set u_name = #{user.uName},u_phone = #{user.uPhone}, u_type = #{user.uType}
+    <update id="updateUser" parameterType="com.chen.devicemonitor.entity.User">
+        update user set u_name = #{user.uName},u_phone = #{user.phone}, u_type = #{user.type}
         where u_id = #{user.uId}
     </update>
     <delete id="deleteUser">
@@ -16,5 +16,9 @@
     <select id="getAllUser" resultType="com.chen.devicemonitor.entity.User">
         select u_id as uId, u_name as uName, u_phone as phone,
         u_type as type from user;
+    </select>
+    <select id="getUserById" resultType="com.chen.devicemonitor.entity.User">
+        select u_id as uId, u_name as uName, u_phone as phone,
+        u_type as type from user where u_id = #{id}
     </select>
 </mapper>
