@@ -50,6 +50,7 @@ public class MessageController {
         messageVo.setUserName(userMapper.getUserById(message.getUId()).getUName());
         messageVo.setDate(message.getDate());
         messageVo.setMsg(message.getMsg());
+        messageVo.setPort(message.getDPort());
         return messageVo;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface MessageMapper {
-    Message getMessage(@Param("date") String date,@Param("userId") int userId,@Param("deviceId") int deviceId);
+    Message getMessage(@Param("date") String date,@Param("userId") int userId,@Param("deviceId") int deviceId,@Param("port") String port);
     void insertMessage(@Param("m") Message message) ;
     List<Message> getAllMessage();
 }

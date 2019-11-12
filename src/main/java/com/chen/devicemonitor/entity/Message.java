@@ -6,6 +6,7 @@ import lombok.Data;
 public class Message {
     Integer mId;
     Integer dId;
+    String dPort;
     Integer uId;
     String date;
     String msg;

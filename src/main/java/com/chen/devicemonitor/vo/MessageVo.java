@@ -9,4 +9,5 @@ public class MessageVo {
     String userName;
     String date;
     String msg;
+    String port;
 }

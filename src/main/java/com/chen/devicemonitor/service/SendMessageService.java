@@ -29,7 +29,7 @@ public class SendMessageService {
     @Resource
     MessageMapper messageMapper;
 
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    //@Scheduled(cron = "0 0/1 * * * ? ")
     public void sendMessage(){
         logger.info("{}, check and ready to send message", DateUtil.getNumberTime(System.currentTimeMillis()));
         List<Device> wrongDevices = scanService.getWrongDevice();
@@ -48,11 +48,9 @@ public class SendMessageService {
         }
     }
     private void send(Device device,List<User> users) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        long now = System.currentTimeMillis();
-        String date = simpleDateFormat.format(now);
+        String date = DateUtil.getYMD(System.currentTimeMillis());
         for(User user : users) {
-            Message message = messageMapper.getMessage(date,user.getUId(),device.getDId());
+            Message message = messageMapper.getMessage(date,user.getUId(),device.getDId(),device.getDPort());
             if(message == null) {
                 //发送消息，短信平台接入
                 //写数据库模拟短信发送
@@ -61,7 +59,7 @@ public class SendMessageService {
                 msg.setUId(user.getUId());
                 msg.setDate(date);
                 msg.setMsg(genMessage(user,device));
-                System.out.println(msg.toString());
+                msg.setDPort(device.getDPort());
                 messageMapper.insertMessage(msg);
             }
         }

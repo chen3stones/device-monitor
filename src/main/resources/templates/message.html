@@ -14,6 +14,7 @@
             <tr>
                 <th>消息编号</th>
                 <th>设备名称</th>
+                <th>设备端口</th>
                 <th>用户名称</th>
                 <th>发送时间</th>
                 <th>消息内容</th>
@@ -21,6 +22,7 @@
             <tr th:each="message:${messages}">
                 <td th:text="${message.getId()}"></td>
                 <td th:text="${message.getDeviceName()}"></td>
+                <td th:text="${message.getPort() == null ? '--' : message.getPort() }"></td>
                 <td th:text="${message.getUserName()}"></td>
                 <td th:text="${message.getDate()}"></td>
                 <td th:text="${message.getMsg()}"></td>

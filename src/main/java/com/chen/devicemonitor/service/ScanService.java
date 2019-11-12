@@ -32,9 +32,15 @@ public class ScanService {
                     try {
                         String[] ports = device.getDPort().split(",");
                         for(String port : ports) {
-                            logger.info("ready to check {}:{}",device.getDIP(),device.getDPort());
-                            if(!isOnline(device.getDIP(),Integer.valueOf(port))){
-                                wrongDevices.add(device);
+                            logger.info("ready to check {}:{}",device.getDIP(),port);
+                            if(!isOnline(device.getDIP(),Integer.parseInt(port))){
+                                Device wrongDevice = new Device();
+                                wrongDevice.setDId(device.getDId());
+                                wrongDevice.setDIP(device.getDIP());
+                                wrongDevice.setDPort(port);
+                                wrongDevice.setDName(device.getDName());
+                                wrongDevice.setType(device.getType());
+                                wrongDevices.add(wrongDevice);
                             }
                         }
                     } catch (Exception e){
@@ -61,7 +67,7 @@ public class ScanService {
             InetAddress inetAddress;
             boolean online = false;
             inetAddress = InetAddress.getByName(hostName);
-            online = inetAddress.isReachable(1500);
+            online = inetAddress.isReachable(1000);
             return online;
         } catch (IOException e) {
             logger.error("{} is outline with log:{}",hostName,e.getMessage());
