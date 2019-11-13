@@ -90,7 +90,7 @@ public class UserController {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode("用户表.xls", "utf-8"));
         OutputStream outputStream = response.getOutputStream();
-        Workbook workbook = excelService.createDeviceExcelFile();
+        Workbook workbook = excelService.createUserExcelFile();
         workbook.write(outputStream);
         outputStream.flush();
         outputStream.close();

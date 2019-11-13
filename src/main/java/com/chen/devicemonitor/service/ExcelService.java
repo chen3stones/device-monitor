@@ -1,6 +1,7 @@
 package com.chen.devicemonitor.service;
 
 import com.chen.devicemonitor.dao.DeviceMapper;
+import com.chen.devicemonitor.dao.UserMapper;
 import com.chen.devicemonitor.entity.User;
 import com.chen.devicemonitor.enumeration.DeviceRoleEnum;
 import com.chen.devicemonitor.entity.Device;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ExcelService {
     @Autowired
     DeviceMapper deviceMapper;
+    @Autowired
+    UserMapper userMapper;
     public List<Device> getDeviceFromExcel(InputStream inputStream,String fileName) throws  Exception{
         List<Device> list = new ArrayList<>();
         Workbook workbook = check(inputStream,fileName);
@@ -53,6 +56,13 @@ public class ExcelService {
         return list;
     }
 
+    /**
+     * 解析用户表成为用户信息
+     * @param inputStream
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
     public List<User> getUserFromExcel(InputStream inputStream,String fileName) throws Exception {
         List<User> users = new ArrayList<>();
         Workbook workbook = check(inputStream,fileName);
@@ -81,6 +91,44 @@ public class ExcelService {
             }
         }
         return users;
+    }
+
+    /**
+     * 生成设备表的workbook用于下载
+     * @return
+     * @throws Exception
+     */
+    public Workbook createDeviceExcelFile() throws Exception{
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("设备表");
+        createDeviceHead(sheet);
+        List<Device> deviceList = deviceMapper.getAllDevice();
+        int rowNumber = 1;
+        for(Device device : deviceList) {
+            HSSFRow row = sheet.createRow(rowNumber++);
+            row.createCell(0).setCellValue(device.getDName());
+            row.createCell(1).setCellValue(DeviceRoleEnum.getByCode(device.getType()).getDesc());
+            row.createCell(2).setCellValue(device.getDIP());
+            row.createCell(3).setCellValue(device.getDPort());
+        }
+        //buildExcelFile("设备表",workbook);
+        return workbook;
+    }
+
+    public Workbook createUserExcelFile() throws Exception{
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("用户表");
+        createUserHead(sheet);
+        List<User> users = userMapper.getAllUser();
+        int rowNumber = 1;
+        for(User user : users) {
+            HSSFRow row = sheet.createRow(rowNumber++);
+            row.createCell(0).setCellValue(user.getUName());
+            row.createCell(1).setCellValue(UserRoleEnum.getByCode(user.getType()).getDesc());
+            row.createCell(2).setCellValue(user.getPhone());
+        }
+        //buildExcelFile("设备表",workbook);
+        return workbook;
     }
 
     /**
@@ -136,23 +184,11 @@ public class ExcelService {
         return UserRoleEnum.getByDesc(type).getCode();
     }
 
-    public Workbook createDeviceExcelFile() throws Exception{
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("设备表");
-        createDeviceHead(sheet);
-        List<Device> deviceList = deviceMapper.getAllDevice();
-        int rowNumber = 1;
-        for(Device device : deviceList) {
-            HSSFRow row = sheet.createRow(rowNumber++);
-            row.createCell(0).setCellValue(device.getDName());
-            row.createCell(1).setCellValue(DeviceRoleEnum.getByCode(device.getType()).getDesc());
-            row.createCell(2).setCellValue(device.getDIP());
-            row.createCell(3).setCellValue(device.getDPort());
-        }
-        //buildExcelFile("设备表",workbook);
-        return workbook;
-    }
-    //创建表头
+
+    /**
+     * 创建表头
+     * @param sheet
+     */
     private void createDeviceHead(HSSFSheet sheet){
         HSSFRow firstRow = sheet.createRow(0);
         //firstRow.setHeight((short) 3);
@@ -184,6 +220,25 @@ public class ExcelService {
         workbook.write(fileOutputStream);
         fileOutputStream.flush();
         fileOutputStream.close();
+    }
+
+    /**
+     * 设置用户表表头
+     * @param sheet
+     */
+    private void createUserHead(HSSFSheet sheet){
+        HSSFRow firstRow = sheet.createRow(0);
+        sheet.setColumnWidth(0,10*256);
+        sheet.setColumnWidth(1,12*256);
+        sheet.setColumnWidth(2,13*256);
+
+        HSSFCell cell;
+        cell = firstRow.createCell(0);
+        cell.setCellValue("用户名");
+        cell = firstRow.createCell(1);
+        cell.setCellValue("用户类型");
+        cell = firstRow.createCell(2);
+        cell.setCellValue("用户电话");
     }
 
 }
