@@ -4,15 +4,24 @@ import com.chen.devicemonitor.dao.DeviceMapper;
 import com.chen.devicemonitor.dao.MessageMapper;
 import com.chen.devicemonitor.dao.UserMapper;
 import com.chen.devicemonitor.entity.Message;
+import com.chen.devicemonitor.service.WebSocketService;
 import com.chen.devicemonitor.vo.MessageVo;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +35,8 @@ public class MessageController {
     DeviceMapper deviceMapper;
     @Autowired
     UserMapper userMapper;
-
+    @Autowired
+    WebSocketService webSocketService;
     @GetMapping("/list")
     public String getAllMessage(Model model) {
         List<MessageVo> messageVos = new ArrayList<>();
@@ -41,6 +51,12 @@ public class MessageController {
         }
         model.addAttribute("messages",messageVos);
         return "message";
+    }
+
+    @ResponseBody
+    @RequestMapping("/push")
+    public void pushMessage() throws IOException {
+        webSocketService.sendMessage("message form server");
     }
 
     private MessageVo translate(Message message) {

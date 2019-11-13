@@ -1,4 +1,4 @@
-package com.chen.devicemonitor.en;
+package com.chen.devicemonitor.enumeration;
 
 public enum  UserRoleEnum {
     NET_ADMIN(0,"网络管理员"),

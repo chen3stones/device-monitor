@@ -6,6 +6,7 @@ import com.chen.devicemonitor.entity.Device;
 import com.chen.devicemonitor.entity.Message;
 import com.chen.devicemonitor.entity.User;
 import com.chen.devicemonitor.util.DateUtil;
+import com.chen.devicemonitor.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -28,7 +29,8 @@ public class SendMessageService {
     UserMapper userMapper;
     @Resource
     MessageMapper messageMapper;
-
+    @Resource
+    WebSocketService webSocketService;
     //@Scheduled(cron = "0 0/1 * * * ? ")
     public void sendMessage(){
         logger.info("{}, check and ready to send message", DateUtil.getNumberTime(System.currentTimeMillis()));
@@ -61,11 +63,23 @@ public class SendMessageService {
                 msg.setMsg(genMessage(user,device));
                 msg.setDPort(device.getDPort());
                 messageMapper.insertMessage(msg);
+                try {
+                    webSocketService.sendMessage(message.getMsg());
+                } catch (Exception e){
+                    logger.error("send message to client fail,{}",e.getMessage());
+                }
             }
         }
     }
 
     private String genMessage(User user,Device device) {
-        return "尊敬的" + user.getUName() + ",设备" + device.getDName() + ":" + device.getDPort() + "网络中断，请查看";
+        String s =  DateUtil.getNumberTime(System.currentTimeMillis()) + "，" + device.getDName() + "-" + device.getDIP();
+        if(StringUtil.isEmpty(device.getDPort())) {
+            s += "，网络不通";
+        }else{
+            s = s + "，端口" + device.getDPort();
+        }
+        s += "，请及时检查";
+        return s;
     }
 }

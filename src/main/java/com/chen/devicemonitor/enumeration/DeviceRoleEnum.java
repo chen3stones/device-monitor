@@ -1,4 +1,4 @@
-package com.chen.devicemonitor.en;
+package com.chen.devicemonitor.enumeration;
 
 public enum  DeviceRoleEnum {
     NET_DEVICE(0,"网络设备"),
