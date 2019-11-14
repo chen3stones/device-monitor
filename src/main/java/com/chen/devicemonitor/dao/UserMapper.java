@@ -10,7 +10,9 @@ import java.util.List;
 public interface UserMapper {
     List<User> getAllUser();
     User getUserById(Integer id);
+    User getUserByName(String name);
     Integer addUser(@Param("user") User user);
     Integer updateUser(@Param("user") User user);
     Integer deleteUser(Integer id);
+    void clear();
 }

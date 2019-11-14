@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.util.comparator.ComparableComparator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -22,7 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/device")
@@ -35,6 +39,7 @@ public class DeviceController {
     @GetMapping("/list")
     public String Devices(Model model){
         List<Device> devices = deviceMapper.getAllDevice();
+        devices = devices.stream().sorted(Comparator.comparingInt(Device::getDId)).collect(Collectors.toList());
         model.addAttribute("devices",devices);
         return "devices";
     }
@@ -57,6 +62,7 @@ public class DeviceController {
     @RequestMapping("/upload")
     @ResponseBody
     public void upload(HttpServletRequest request,HttpServletResponse response) throws Exception{
+        deviceMapper.clear();
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
         MultipartFile file = multipartRequest.getFile("filename");
         if(file == null || file.isEmpty()) {

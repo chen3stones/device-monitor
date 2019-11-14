@@ -8,6 +8,7 @@
         update device set d_name = #{device.dName}, d_ip = #{device.dIP}, d_port = #{device.dPort}, d_type = #{device.type}
         where d_id = #{device.dId}
     </update>
+    <update id="clear">truncate table device</update>
     <delete id="deleteDeviceById">
         delete from device where d_id = #{id}
     </delete>
@@ -18,5 +19,9 @@
     <select id="getDeviceById" resultType="com.chen.devicemonitor.entity.Device">
         select d_id as dId, d_name as dName, d_ip as dIP,
         d_port as dPort, d_type as type from device where d_id = #{id}
+    </select>
+    <select id="getDeviceByName" resultType="com.chen.devicemonitor.entity.Device">
+        select d_id as dId, d_name as dName, d_ip as dIP,
+        d_port as dPort, d_type as type from device where d_name = #{name}
     </select>
 </mapper>

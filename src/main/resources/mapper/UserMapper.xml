@@ -8,6 +8,7 @@
         update user set u_name = #{user.uName},u_phone = #{user.phone}, u_type = #{user.type}
         where u_id = #{user.uId}
     </update>
+    <update id="clear">truncate table user</update>
     <delete id="deleteUser">
         delete  from user where u_id = #{id}
     </delete>
@@ -20,5 +21,9 @@
     <select id="getUserById" resultType="com.chen.devicemonitor.entity.User">
         select u_id as uId, u_name as uName, u_phone as phone,
         u_type as type from user where u_id = #{id}
+    </select>
+    <select id="getUserByName" resultType="com.chen.devicemonitor.entity.User">
+        select u_id as uId, u_name as uName, u_phone as phone,
+        u_type as type from user where u_name = #{name}
     </select>
 </mapper>

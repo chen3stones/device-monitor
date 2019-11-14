@@ -8,26 +8,33 @@
     <link href="../fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <div style="position: relative">
-        <div class="form-group">
-            <form method="post" enctype="multipart/form-data" id="form" action="/device/upload">
-                <label>批量导入</label>
-                <div class="btn-group">
-                    <label class="input-group-btn">
-                        <input class="file" type="file" name="filename" value="选择文件" accept=".xls, .xlsx" onchange="$('#location').val($('#i-file').val());" data-show-preview="false">
-                    </label>
-                    <label class="input-group-btn">
-                        <input type="submit" value="上传" class="btn btn-primary">
-                    </label>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div>
-        <label><a href="/device/download">批量导出</a> </label>
-    </div>
 
-    <div style="margin: auto 50px">
+
+    <div style="margin: 50px 40px">
+        <ul class="nav nav-tabs">
+            <li role="presentation"><a href="/message/list/admin">系统管理员消息列表</a></li>
+            <li role="presentation"><a href="/message/list/normal">网络管理员消息列表</a></li>
+            <li role="presentation"><a href="/user/list">用户列表</a></li>
+            <li role="presentation" class="active"><a href="/device/list">设备列表</a></li>
+        </ul>
+        <div style="position: relative">
+            <div class="form-group">
+                <form method="post" enctype="multipart/form-data" id="form" action="/device/upload">
+                    <label>批量导入</label>
+                    <div class="btn-group">
+                        <label class="input-group-btn">
+                            <input class="file" type="file" name="filename" value="选择文件" accept=".xls, .xlsx" onchange="$('#location').val($('#i-file').val());" data-show-preview="false">
+                        </label>
+                        <label class="input-group-btn">
+                            <input type="submit" value="上传" class="btn btn-primary">
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <label><a href="/device/download">批量导出</a> </label>
+        </div>
         <h2 class="sub-header" align="center">设备列表</h2>
         <div class="table-responsive">
             <table class="table table-striped">

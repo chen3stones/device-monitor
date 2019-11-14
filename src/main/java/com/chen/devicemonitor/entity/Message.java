@@ -10,4 +10,5 @@ public class Message {
     Integer uId;
     String date;
     String msg;
+    Integer status;
 }

@@ -13,4 +13,6 @@ public interface MessageMapper {
     Message getMessage(@Param("date") String date,@Param("userId") int userId,@Param("deviceId") int deviceId,@Param("port") String port);
     void insertMessage(@Param("m") Message message) ;
     List<Message> getAllMessage();
+    Message getMessageById(@Param("id") Integer id);
+    void updateMessage(@Param("m") Message m);
 }

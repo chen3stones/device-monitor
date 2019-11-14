@@ -10,4 +10,5 @@ public class MessageVo {
     String date;
     String msg;
     String port;
+    Integer status;
 }

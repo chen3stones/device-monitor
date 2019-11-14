@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -34,6 +36,7 @@ public class UserController {
     @GetMapping("/list")
     public String getUsers(Model model){
         List<User> users = userMapper.getAllUser();
+        users = users.stream().sorted(Comparator.comparingInt(User::getUId)).collect(Collectors.toList());
         model.addAttribute("users",users);
         return "user";
     }
@@ -65,6 +68,7 @@ public class UserController {
     @RequestMapping("/upload")
     @ResponseBody
     public void upload(HttpServletRequest request,HttpServletResponse response) throws Exception{
+        userMapper.clear();
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
         MultipartFile file = multipartRequest.getFile("filename");
         if(file.isEmpty()) {

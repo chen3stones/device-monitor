@@ -5,10 +5,12 @@ import com.chen.devicemonitor.dao.UserMapper;
 import com.chen.devicemonitor.entity.Device;
 import com.chen.devicemonitor.entity.Message;
 import com.chen.devicemonitor.entity.User;
+import com.chen.devicemonitor.enumeration.DeviceRoleEnum;
 import com.chen.devicemonitor.util.DateUtil;
 import com.chen.devicemonitor.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class SendMessageService {
     MessageMapper messageMapper;
     @Resource
     WebSocketService webSocketService;
-    //@Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/5 * * * ? ")
     public void sendMessage(){
         logger.info("{}, check and ready to send message", DateUtil.getNumberTime(System.currentTimeMillis()));
         List<Device> wrongDevices = scanService.getWrongDevice();
@@ -60,24 +62,26 @@ public class SendMessageService {
                 msg.setDId(device.getDId());
                 msg.setUId(user.getUId());
                 msg.setDate(date);
-                msg.setMsg(genMessage(user,device));
+                msg.setMsg(genMessage(device));
                 msg.setDPort(device.getDPort());
+                msg.setStatus(0);
                 messageMapper.insertMessage(msg);
+                //通知
                 try {
-                    webSocketService.sendMessage(message.getMsg());
+                    webSocketService.sendMessage(msg.getMsg(), DeviceRoleEnum.getByCode(device.getType()));
                 } catch (Exception e){
-                    logger.error("send message to client fail,{}",e.getMessage());
+                    logger.error("send message to client fail,reason:{}",e.getMessage());
                 }
             }
         }
     }
 
-    private String genMessage(User user,Device device) {
+    private String genMessage(Device device) {
         String s =  DateUtil.getNumberTime(System.currentTimeMillis()) + "，" + device.getDName() + "-" + device.getDIP();
         if(StringUtil.isEmpty(device.getDPort())) {
             s += "，网络不通";
         }else{
-            s = s + "，端口" + device.getDPort();
+            s = s + "，端口" + device.getDPort() + "不通";
         }
         s += "，请及时检查";
         return s;

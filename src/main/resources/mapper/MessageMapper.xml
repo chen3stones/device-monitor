@@ -2,11 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chen.devicemonitor.dao.MessageMapper">
     <insert id="insertMessage" parameterType="com.chen.devicemonitor.entity.Message">
-        insert into message(u_id,d_id,m_date,msg,d_port)values(#{m.uId},#{m.dId},#{m.date},#{m.msg},#{m.dPort})
+        insert into message(u_id,d_id,m_date,msg,d_port,status)values(#{m.uId},#{m.dId},#{m.date},#{m.msg},#{m.dPort},#{m.status})
     </insert>
+    <update id="updateMessage">
+        update message set u_id = #{m.uId},d_id = #{m.dId},status = #{m.status}, d_port = #{m.dPort},msg = #{m.msg}
+        where m_id = #{m.mId}
+    </update>
 
     <select id="getMessage" resultType="com.chen.devicemonitor.entity.Message">
-        select m_id as mId, u_id as uId, d_id as dId from message
+        select m_id as mId, u_id as uId, d_id as dId, status as status from message
         where u_id = #{userId} and d_id = #{deviceId} and m_date = #{date}
         <if test="port != null and port != ''">
             and d_port = #{port}
@@ -14,6 +18,11 @@
     </select>
     <select id="getAllMessage" resultType="com.chen.devicemonitor.entity.Message">
         select m_id as mId, u_id as uId, d_id as dId,
-         m_date as date, msg as msg ,d_port as dPort from message
+         m_date as date, msg as msg ,d_port as dPort, status as status from message
+    </select>
+    <select id="getMessageById" resultType="com.chen.devicemonitor.entity.Message">
+        select m_id as mId, u_id as uId, d_id as dId,
+         m_date as date, msg as msg ,d_port as dPort, status as status from message
+         where m_id = #{id}
     </select>
 </mapper>
